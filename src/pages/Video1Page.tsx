@@ -10,7 +10,7 @@ interface Video1PageProps {
 
 export const Video1Page: React.FC<Video1PageProps> = ({ userName, onNext }) => {
   const [canContinue, setCanContinue] = useState(false); // <- вместо videoProgress
-  const unlockTime = 30; // разблокировка через 30 секунд
+  const unlockTime = 5; // разблокировка через 30 секунд
 
   useEffect(() => {
     const timer = setTimeout(() => setCanContinue(true), unlockTime * 1000);
