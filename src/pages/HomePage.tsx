@@ -20,7 +20,7 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
               <span className="text-2xl">🧠</span>
             </div>
             
-            <h1 className="text-3xl font-bold text-gray-800 mb-4 leading-tight text-left">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4 leading-tight text-left">
               Переведите 10 лет практики в автоматизированный доход за 60 дней: Запустим ваш онлайн-курс 'под ключ' с гарантией первого потока, пока вы продолжаете консультировать.
             </h1>
             
