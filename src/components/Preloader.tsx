@@ -61,7 +61,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ user, onComplete }) => {
         {/* Текст загрузки */}
         <div className="mb-8 min-h-[60px] flex flex-col justify-center">
           <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Психолог для родителей
+            Маркетинг для психологов
           </h2>
           <p className="text-lg opacity-90 animate-pulse">{currentStep}</p>
         </div>
