@@ -26,7 +26,7 @@ export const Video1Page: React.FC<Video1PageProps> = ({ userName, onNext }) => {
       <div className="max-w-md mx-auto px-4 py-8 space-y-8">
         <VideoPlayer 
           embedCode={embedCode}
-          title="Определяем точку А"
+          title="Почему у вас получится?"
         />
 
         <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
