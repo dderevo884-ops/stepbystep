@@ -17,7 +17,7 @@ export const Video3Page: React.FC<Video3PageProps> = ({ userName, onBack, onFini
   const embedCode = `<div style="position: relative; padding-top: 56.25%; width: 100%"><iframe src="https://kinescope.io/embed/jmU2a49mFS9GPWXMptMbj6" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe></div>`;
 
   const handleSubmitCode = () => {
-    if (codeWord.toLowerCase().trim() === 'страсти') {
+    if (codeWord.toLowerCase().trim() === 'облако') {
       setIsUnlocked(true);
       setShowError(false);
     } else {
