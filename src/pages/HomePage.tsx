@@ -53,29 +53,29 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           <div className="text-center mb-6">
             <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-xl">
               <img 
-                src="https://images.pexels.com/photos/3762800/pexels-photo-3762800.jpeg?auto=compress&cs=tinysrgb&w=400" 
-                alt="Психолог" 
+                src="https://s3.twcstorage.ru/cb963b02-c99e4ad5-ddf5-444e-842c-da74774c0149/ava.jpg" 
+                alt="Маркетолог" 
                 className="w-full h-full object-cover"
               />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Анна Петрова</h3>
-            <p className="text-sm text-purple-600 font-medium mb-4">Детский психолог, эксперт по эмоциональному развитию</p>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Джумаев Альберт</h3>
+            <p className="text-sm text-purple-600 font-medium mb-4">Интернет-маркетолог, эксперт по лидогенерации</p>
           </div>
           
           <div className="text-left space-y-3">
             <div className="flex items-start space-x-3">
               <span className="text-lg mt-1">🎓</span>
-              <span className="text-gray-700">15+ лет практики работы с детьми и родителями</span>
+              <span className="text-gray-700">+100 кейсов в портфолио по продвижению бизнеса в интернете</span>
             </div>
             
             <div className="flex items-start space-x-3">
               <span className="text-lg mt-1">📚</span>
-              <span className="text-gray-700">Автор методик по эмоциональному интеллекту</span>
+              <span className="text-gray-700">Открутил на рекламу более 10млн₽ за 2025</span>
             </div>
             
             <div className="flex items-start space-x-3">
               <span className="text-lg mt-1">❤️</span>
-              <span className="text-gray-700">Помогла более 1000 семей наладить отношения</span>
+              <span className="text-gray-700">Помогаю бизнесу выстроить систему привлечения клиентов</span>
             </div>
           </div>
         </div>
