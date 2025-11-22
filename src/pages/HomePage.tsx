@@ -20,13 +20,18 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
               <span className="text-2xl">🧠</span>
             </div>
             
-            <h1 className="text-3xl font-bold text-gray-800 mb-4 leading-tight">
+            <h1 className="text-3xl font-bold text-gray-800 mb-4 leading-tight text-left">
               10 практических инструментов для управления эмоциями ребёнка
             </h1>
             
-            <p className="text-lg text-gray-600 leading-relaxed">
+            <p className="text-lg text-gray-600 leading-relaxed text-left mb-6">
               Научитесь помогать вашему ребёнку справляться с эмоциями через проверенные методики
             </p>
+            
+            {/* Кнопка начать */}
+            <div className="mb-6">
+              <SwipeButton onSwipe={onStartJourney} text="Начать обучение →" />
+            </div>
           </div>
         </div>
 
@@ -43,33 +48,36 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           </div>
         </div>
 
-        {/* Преимущества */}
-        <div className="space-y-4">
-          <div className="bg-white rounded-2xl p-4 shadow-md border-l-4 border-purple-500">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">🎯</span>
-              <span className="font-medium text-gray-800">Практические техники</span>
+        {/* Об авторе */}
+        <div className="bg-white rounded-3xl p-6 shadow-lg">
+          <div className="text-center mb-6">
+            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-xl">
+              <img 
+                src="https://images.pexels.com/photos/3762800/pexels-photo-3762800.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Психолог" 
+                className="w-full h-full object-cover"
+              />
             </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Анна Петрова</h3>
+            <p className="text-sm text-purple-600 font-medium mb-4">Детский психолог, эксперт по эмоциональному развитию</p>
           </div>
           
-          <div className="bg-white rounded-2xl p-4 shadow-md border-l-4 border-pink-500">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">⏱️</span>
-              <span className="font-medium text-gray-800">Быстрые результаты</span>
+          <div className="text-left space-y-3">
+            <div className="flex items-start space-x-3">
+              <span className="text-lg mt-1">🎓</span>
+              <span className="text-gray-700">15+ лет практики работы с детьми и родителями</span>
+            </div>
+            
+            <div className="flex items-start space-x-3">
+              <span className="text-lg mt-1">📚</span>
+              <span className="text-gray-700">Автор методик по эмоциональному интеллекту</span>
+            </div>
+            
+            <div className="flex items-start space-x-3">
+              <span className="text-lg mt-1">❤️</span>
+              <span className="text-gray-700">Помогла более 1000 семей наладить отношения</span>
             </div>
           </div>
-          
-          <div className="bg-white rounded-2xl p-4 shadow-md border-l-4 border-blue-500">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">❤️</span>
-              <span className="font-medium text-gray-800">Проверено экспертами</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Кнопка начать */}
-        <div className="pt-4">
-          <SwipeButton onSwipe={onStartJourney} text="Начать обучение →" />
         </div>
       </div>
     </div>
