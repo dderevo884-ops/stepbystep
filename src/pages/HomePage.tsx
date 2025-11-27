@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { ProgressBar } from '../components/ProgressBar';
-import { SwipeButton } from '../components/SwipeButton';
+import { VideoPlayer } from '../components/VideoPlayer';
+import { ArrowRight, Lock } from 'lucide-react';
 
 interface HomePageProps {
   userName?: string;
@@ -8,43 +10,95 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) => {
+  const [videoProgress, setVideoProgress] = useState(0);
+  const isVideoWatched = videoProgress >= 50; // 50% просмотра
+
+  const handleVideoProgress = (progress: number) => {
+    setVideoProgress(progress);
+  };
+
+  const embedCode = `<div style="position: relative; padding-top: 56.25%; width: 100%"><iframe src="https://kinescope.io/embed/jmU2a49mFS9GPWXMptMbj6" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe></div>`;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       <Header userName={userName} />
       
       <div className="max-w-md mx-auto px-4 py-8 space-y-8">
-        {/* УТП */}
-        <div className="text-center">
-          <div className="bg-white rounded-3xl p-8 shadow-xl shadow-purple-100/50">
-            <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-              <span className="text-2xl">🧠</span>
-            </div>
-            
-            <h1 className="text-2xl font-bold text-gray-800 mb-4 leading-tight text-left">
-              Переведите 10 лет практики в автоматизированный доход за 30 дней.
-            </h1>
-            
-            <p className="text-lg text-gray-600 leading-relaxed text-left mb-6">
-              3 видео которое изменит ваше представление о своей экспертности. Иметь тысячи учеников по всему миру станет для вас нормой
-            </p>
-            
-            {/* Кнопка начать */}
-            <div className="mb-6">
-              <SwipeButton onSwipe={onStartJourney} text="Начать обучение →" />
+        {/* Заголовок и подзаголовок */}
+        <div className="bg-white rounded-3xl p-8 shadow-xl shadow-purple-100/50">
+          <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+            <span className="text-2xl">🧠</span>
+          </div>
+          
+          <h1 className="text-3xl font-bold text-gray-800 mb-4 leading-tight text-left">
+            10 практических инструментов для управления эмоциями ребёнка
+          </h1>
+          
+          <p className="text-lg text-gray-600 leading-relaxed text-left mb-6">
+            Научитесь помогать вашему ребёнку справляться с эмоциями через проверенные методики
+          </p>
+        </div>
+
+        {/* Видео */}
+        <VideoPlayer 
+          embedCode={embedCode}
+          title="Определяем точку А"
+          onProgress={handleVideoProgress}
+        />
+
+        {/* Кнопка дальше */}
+        <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
+          <div className="mb-4">
+            <div className="w-12 h-12 mx-auto bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+              <span className="text-xl">✓</span>
             </div>
           </div>
+          
+          <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+            Вы посмотрели видео и готовы узнать больше? Переходите дальше, чтобы начать обучение!
+          </p>
+          
+          <button 
+            onClick={onStartJourney}
+            disabled={!isVideoWatched}
+            className={`w-full py-4 px-6 rounded-2xl font-semibold text-lg transition-all duration-200 ${
+              isVideoWatched
+                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl shadow-green-500/30 hover:shadow-2xl hover:shadow-green-500/40 active:scale-95' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+          >
+            <div className="flex items-center justify-center space-x-2">
+              {isVideoWatched ? (
+                <>
+                  <span>Перейти дальше</span>
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              ) : (
+                <>
+                  <Lock className="w-5 h-5" />
+                  <span>Заблокировано</span>
+                </>
+              )}
+            </div>
+          </button>
+          
+          {!isVideoWatched && (
+            <p className="text-sm text-gray-500 mt-3">
+              Посмотрите видео чтобы открыть следующее
+            </p>
+          )}
         </div>
 
         {/* Прогресс */}
         <div className="bg-white rounded-2xl p-6 shadow-lg">
           <ProgressBar 
-            current={0} 
+            current={1} 
             total={3} 
             label="Ваш прогресс" 
           />
           <div className="mt-4 text-center">
-            <p className="text-sm text-gray-500">Вы на старте обучения</p>
-            <p className="text-xs text-gray-400 mt-1">Всего 3 видео урока</p>
+            <p className="text-sm text-gray-500">Урок 1 из 3</p>
+            <p className="text-xs text-gray-400 mt-1">33% завершено</p>
           </div>
         </div>
 
@@ -53,29 +107,29 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           <div className="text-center mb-6">
             <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-xl">
               <img 
-                src="https://s3.twcstorage.ru/cb963b02-c99e4ad5-ddf5-444e-842c-da74774c0149/ava.jpg" 
-                alt="Маркетолог" 
+                src="https://images.pexels.com/photos/3762800/pexels-photo-3762800.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                alt="Психолог" 
                 className="w-full h-full object-cover"
               />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Джумаев Альберт</h3>
-            <p className="text-sm text-purple-600 font-medium mb-4">Интернет-маркетолог, эксперт по лидогенерации</p>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Анна Петрова</h3>
+            <p className="text-sm text-purple-600 font-medium mb-4">Детский психолог, эксперт по эмоциональному развитию</p>
           </div>
           
           <div className="text-left space-y-3">
             <div className="flex items-start space-x-3">
               <span className="text-lg mt-1">🎓</span>
-              <span className="text-gray-700">+100 кейсов в портфолио по продвижению бизнеса в интернете</span>
+              <span className="text-gray-700">15+ лет практики работы с детьми и родителями</span>
             </div>
             
             <div className="flex items-start space-x-3">
               <span className="text-lg mt-1">📚</span>
-              <span className="text-gray-700">Открутил на рекламу более 10млн₽ за 2025</span>
+              <span className="text-gray-700">Автор методик по эмоциональному интеллекту</span>
             </div>
             
             <div className="flex items-start space-x-3">
               <span className="text-lg mt-1">❤️</span>
-              <span className="text-gray-700">Помогаю бизнесу выстроить систему привлечения клиентов</span>
+              <span className="text-gray-700">Помогла более 1000 семей наладить отношения</span>
             </div>
           </div>
         </div>
