@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
+import { VideoPlayer } from '../components/VideoPlayer';
 import { ArrowRight, Lock } from 'lucide-react';
 
 interface Video2PageProps {
@@ -8,45 +9,64 @@ interface Video2PageProps {
 }
 
 export const Video2Page: React.FC<Video2PageProps> = ({ userName, onNext }) => {
-  const [canContinue, setCanContinue] = useState(false); // разблокировка
+  const [canContinue, setCanContinue] = useState(false); // разблокировка кнопки
   const unlockTime = 5; // 5 секунд
+  const storageKey = 'video2-unlock';
 
   useEffect(() => {
-    const timer = setTimeout(() => setCanContinue(true), unlockTime * 1000);
-    return () => clearTimeout(timer);
+    const unlockTimestamp = localStorage.getItem(storageKey);
+    const now = Date.now();
+
+    if (unlockTimestamp && now >= Number(unlockTimestamp)) {
+      setCanContinue(true);
+    } else {
+      const timer = setTimeout(() => {
+        setCanContinue(true);
+        localStorage.setItem(storageKey, String(Date.now()));
+      }, unlockTime * 1000);
+
+      return () => clearTimeout(timer);
+    }
   }, []);
 
-  const embedCode = `<div style="position: relative; padding-top: 56.25%; width: 100%"><iframe src="https://kinescope.io/embed/jmU2a49mFS9GPWXMptMbj6" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe></div>`;
+  const embedCode = `<div style="position: relative; padding-top: 56.25%; width: 100%">
+    <iframe 
+      src="https://kinescope.io/embed/jmU2a49mFS9GPWXMptMbj6" 
+      allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" 
+      frameborder="0" allowfullscreen 
+      style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+    </iframe>
+  </div>`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
       <Header userName={userName} />
 
       <div className="max-w-md mx-auto px-4 py-8 space-y-8">
-
-        {/* ВИДЕО напрямую */}
-        <div
-          className="bg-white rounded-2xl p-4 shadow-lg"
-          dangerouslySetInnerHTML={{ __html: embedCode }}
+        {/* Видео */}
+        <VideoPlayer 
+          embedCode={embedCode}
+          title="Какие инструменты рабочие на самом деле"
         />
 
+        {/* Кнопка далее */}
         <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
           <div className="mb-4">
             <div className="w-12 h-12 mx-auto bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
               <span className="text-xl">🛠️</span>
             </div>
           </div>
-
+          
           <p className="text-lg text-gray-700 mb-6 leading-relaxed">
             Завершающее видео где я расскажу где применяются инструменты
           </p>
-
-          <button
+          
+          <button 
             onClick={onNext}
             disabled={!canContinue}
             className={`w-full py-4 px-6 rounded-2xl font-semibold text-lg transition-all duration-200 ${
-              canContinue
-                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 active:scale-95'
+              canContinue 
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 active:scale-95' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >
@@ -64,7 +84,7 @@ export const Video2Page: React.FC<Video2PageProps> = ({ userName, onNext }) => {
               )}
             </div>
           </button>
-
+          
           {!canContinue && (
             <p className="text-sm text-gray-500 mt-3">
               Подождите {unlockTime} секунд, чтобы открыть следующее
@@ -79,13 +99,9 @@ export const Video2Page: React.FC<Video2PageProps> = ({ userName, onNext }) => {
             <span>67%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div
-              className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"
-              style={{ width: '67%' }}
-            ></div>
+            <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full" style={{ width: '67%' }}></div>
           </div>
         </div>
-
       </div>
     </div>
   );
