@@ -13,49 +13,32 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
   const [canContinue, setCanContinue] = useState(false);
   const unlockTime = 5;
 
-  // состояние для визуального дебаг-окна
-  const [debugInfo, setDebugInfo] = useState({
-    mountedAt: 0,
-    now: 0,
-    secondsPassed: 0,
-    timerFired: false,
+  const [debug, setDebug] = useState({
+    mounted: false,
+    seconds: 0,
   });
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const mountedAt = Date.now();
+    setDebug({ mounted: true, seconds: 0 });
 
-    // сразу записываем первую инфу
-    setDebugInfo({
-      mountedAt,
-      now: mountedAt,
-      secondsPassed: 0,
-      timerFired: false,
-    });
-
-    // каждую секунду обновляем время, чтобы видеть, что компонент жив
     const interval = window.setInterval(() => {
       const now = Date.now();
-      setDebugInfo(prev => ({
+      setDebug(prev => ({
         ...prev,
-        now,
-        secondsPassed: Math.floor((now - mountedAt) / 1000),
+        seconds: Math.floor((now - mountedAt) / 1000),
       }));
     }, 1000);
 
-    // сам таймер разблокировки
     const timer = window.setTimeout(() => {
       setCanContinue(true);
-      setDebugInfo(prev => ({
-        ...prev,
-        timerFired: true,
-      }));
     }, unlockTime * 1000);
 
     return () => {
-      window.clearTimeout(timer);
       window.clearInterval(interval);
+      window.clearTimeout(timer);
     };
   }, []);
 
@@ -63,20 +46,17 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+      {/* ВИЗУАЛЬНОЕ ОКНО ОТЛАДКИ */}
+      <div className="fixed top-2 left-2 z-50 bg-black text-green-400 text-xs font-mono p-3 rounded-lg shadow-lg">
+        <div>DEBUG PANEL</div>
+        <div>mounted: {debug.mounted ? 'true' : 'false'}</div>
+        <div>seconds: {debug.seconds}s</div>
+        <div>canContinue: {canContinue ? 'true' : 'false'}</div>
+      </div>
+
       <Header userName={userName} />
       
       <div className="max-w-md mx-auto px-4 py-8 space-y-8">
-        {/* Окно отладки */}
-        <div className="bg-black text-green-400 text-xs font-mono p-3 rounded-lg">
-          <div>DEBUG PANEL</div>
-          <div>mountedAt: {debugInfo.mountedAt}</div>
-          <div>now: {debugInfo.now}</div>
-          <div>secondsPassed: {debugInfo.secondsPassed}s</div>
-          <div>timerFired: {debugInfo.timerFired ? 'yes' : 'no'}</div>
-          <div>canContinue: {canContinue ? 'true' : 'false'}</div>
-        </div>
-
-        {/* Далее твой исходный код */}
         <div className="bg-white rounded-3xl p-8 shadow-xl shadow-purple-100/50">
           <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
             <span className="text-2xl">🧠</span>
@@ -147,37 +127,6 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-500">Урок 1 из 3</p>
             <p className="text-xs text-gray-400 mt-1">33% завершено</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-3xl p-6 shadow-lg">
-          <div className="text-center mb-6">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-xl">
-              <img 
-                src="https://images.pexels.com/photos/3762800/pexels-photo-3762800.jpeg?auto=compress&cs=tinysrgb&w=400" 
-                alt="Психолог" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Анна Петрова</h3>
-            <p className="text-sm text-purple-600 font-medium mb-4">Детский психолог, эксперт по эмоциональному развитию</p>
-          </div>
-          
-          <div className="text-left space-y-3">
-            <div className="flex items-start space-x-3">
-              <span className="text-lg mt-1">🎓</span>
-              <span className="text-gray-700">15+ лет практики работы с детьми и родителями</span>
-            </div>
-            
-            <div className="flex items-start space-x-3">
-              <span className="text-lg mt-1">📚</span>
-              <span className="text-gray-700">Автор методик по эмоциональному интеллекту</span>
-            </div>
-            
-            <div className="flex items-start space-x-3">
-              <span className="text-lg mt-1">❤️</span>
-              <span className="text-gray-700">Помогла более 1000 семей наладить отношения</span>
-            </div>
           </div>
         </div>
       </div>
