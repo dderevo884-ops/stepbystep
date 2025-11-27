@@ -2,17 +2,15 @@ import { useState, useEffect } from 'react';
 import { useTelegramWebApp } from './hooks/useTelegramWebApp';
 import { Preloader } from './components/Preloader';
 import { HomePage } from './pages/HomePage';
-import { Video1Page } from './pages/Video1Page';
 import { Video2Page } from './pages/Video2Page';
 import { Video3Page } from './pages/Video3Page';
 
-type AppState = 'loading' | 'home' | 'video1' | 'video2' | 'video3' | 'completed';
+type AppState = 'loading' | 'home' | 'video2' | 'video3' | 'completed';
 
 function App() {
   const { user, isLoaded } = useTelegramWebApp();
   const [currentState, setCurrentState] = useState<AppState>('loading');
 
-  // Функция для прокрутки к началу страницы
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -23,22 +21,18 @@ function App() {
     }
   }, [isLoaded]);
 
-  // Прокрутка к началу при изменении состояния
   useEffect(() => {
     if (currentState !== 'loading') {
       scrollToTop();
     }
   }, [currentState]);
+
   const handlePreloaderComplete = () => {
     setCurrentState('home');
   };
 
   const handleStartJourney = () => {
-    setCurrentState('video1');
-  };
-
-  const handleVideo1Next = () => {
-    setCurrentState('video2');
+    setCurrentState('video2'); // перескакиваем сразу на video2
   };
 
   const handleVideo2Next = () => {
@@ -62,8 +56,6 @@ function App() {
   switch (currentState) {
     case 'home':
       return <HomePage userName={userName} onStartJourney={handleStartJourney} />;
-    case 'video1':
-      return <Video1Page userName={userName} onNext={handleVideo1Next} />;
     case 'video2':
       return <Video2Page userName={userName} onNext={handleVideo2Next} />;
     case 'video3':
