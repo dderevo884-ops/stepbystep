@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { ProgressBar } from '../components/ProgressBar';
 import { VideoPlayer } from '../components/VideoPlayer';
@@ -14,8 +14,14 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
   const unlockTime = 5; // 5 секунд
 
   useEffect(() => {
-    const timer = setTimeout(() => setCanContinue(true), unlockTime * 1000);
-    return () => clearTimeout(timer);
+    // защита от SSR
+    if (typeof window === 'undefined') return;
+
+    const timer = window.setTimeout(() => {
+      setCanContinue(true);
+    }, unlockTime * 1000);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   const embedCode = `<div style="position: relative; padding-top: 56.25%; width: 100%"><iframe src="https://kinescope.io/embed/jmU2a49mFS9GPWXMptMbj6" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe></div>`;
