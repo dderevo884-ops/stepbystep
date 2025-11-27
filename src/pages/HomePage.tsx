@@ -10,12 +10,13 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) => {
-  const [videoProgress, setVideoProgress] = useState(0);
-  const isVideoWatched = videoProgress >= 50; // 50% просмотра
+  const [canContinue, setCanContinue] = useState(false); // разблокировка
+  const unlockTime = 5; // 5 секунд
 
-  const handleVideoProgress = (progress: number) => {
-    setVideoProgress(progress);
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => setCanContinue(true), unlockTime * 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const embedCode = `<div style="position: relative; padding-top: 56.25%; width: 100%"><iframe src="https://kinescope.io/embed/jmU2a49mFS9GPWXMptMbj6" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe></div>`;
 
@@ -24,7 +25,7 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
       <Header userName={userName} />
       
       <div className="max-w-md mx-auto px-4 py-8 space-y-8">
-        {/* Заголовок и подзаголовок */}
+        {/* Заголовок */}
         <div className="bg-white rounded-3xl p-8 shadow-xl shadow-purple-100/50">
           <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
             <span className="text-2xl">🧠</span>
@@ -43,10 +44,9 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
         <VideoPlayer 
           embedCode={embedCode}
           title="Определяем точку А"
-          onProgress={handleVideoProgress}
         />
 
-        {/* Кнопка дальше */}
+        {/* Кнопка далее */}
         <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
           <div className="mb-4">
             <div className="w-12 h-12 mx-auto bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
@@ -60,15 +60,15 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           
           <button 
             onClick={onStartJourney}
-            disabled={!isVideoWatched}
+            disabled={!canContinue}
             className={`w-full py-4 px-6 rounded-2xl font-semibold text-lg transition-all duration-200 ${
-              isVideoWatched
+              canContinue
                 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl shadow-green-500/30 hover:shadow-2xl hover:shadow-green-500/40 active:scale-95' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >
             <div className="flex items-center justify-center space-x-2">
-              {isVideoWatched ? (
+              {canContinue ? (
                 <>
                   <span>Перейти дальше</span>
                   <ArrowRight className="w-5 h-5" />
@@ -82,9 +82,9 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
             </div>
           </button>
           
-          {!isVideoWatched && (
+          {!canContinue && (
             <p className="text-sm text-gray-500 mt-3">
-              Посмотрите видео чтобы открыть следующее
+              Подождите {unlockTime} секунд, чтобы открыть следующее
             </p>
           )}
         </div>
@@ -102,7 +102,7 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           </div>
         </div>
 
-        {/* Об авторе */}
+        {/* Автор */}
         <div className="bg-white rounded-3xl p-6 shadow-lg">
           <div className="text-center mb-6">
             <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-xl">
