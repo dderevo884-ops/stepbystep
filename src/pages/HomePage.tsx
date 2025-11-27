@@ -10,18 +10,53 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) => {
-  const [canContinue, setCanContinue] = useState(false); // разблокировка
-  const unlockTime = 5; // 5 секунд
+  const [canContinue, setCanContinue] = useState(false);
+  const unlockTime = 5;
+
+  // состояние для визуального дебаг-окна
+  const [debugInfo, setDebugInfo] = useState({
+    mountedAt: 0,
+    now: 0,
+    secondsPassed: 0,
+    timerFired: false,
+  });
 
   useEffect(() => {
-    // защита от SSR
     if (typeof window === 'undefined') return;
 
+    const mountedAt = Date.now();
+
+    // сразу записываем первую инфу
+    setDebugInfo({
+      mountedAt,
+      now: mountedAt,
+      secondsPassed: 0,
+      timerFired: false,
+    });
+
+    // каждую секунду обновляем время, чтобы видеть, что компонент жив
+    const interval = window.setInterval(() => {
+      const now = Date.now();
+      setDebugInfo(prev => ({
+        ...prev,
+        now,
+        secondsPassed: Math.floor((now - mountedAt) / 1000),
+      }));
+    }, 1000);
+
+    // сам таймер разблокировки
     const timer = window.setTimeout(() => {
       setCanContinue(true);
+      setDebugInfo(prev => ({
+        ...prev,
+        timerFired: true,
+      }));
     }, unlockTime * 1000);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      window.clearInterval(interval);
+    };
   }, []);
 
   const embedCode = `<div style="position: relative; padding-top: 56.25%; width: 100%"><iframe src="https://kinescope.io/embed/jmU2a49mFS9GPWXMptMbj6" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></iframe></div>`;
@@ -31,7 +66,17 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
       <Header userName={userName} />
       
       <div className="max-w-md mx-auto px-4 py-8 space-y-8">
-        {/* Заголовок */}
+        {/* Окно отладки */}
+        <div className="bg-black text-green-400 text-xs font-mono p-3 rounded-lg">
+          <div>DEBUG PANEL</div>
+          <div>mountedAt: {debugInfo.mountedAt}</div>
+          <div>now: {debugInfo.now}</div>
+          <div>secondsPassed: {debugInfo.secondsPassed}s</div>
+          <div>timerFired: {debugInfo.timerFired ? 'yes' : 'no'}</div>
+          <div>canContinue: {canContinue ? 'true' : 'false'}</div>
+        </div>
+
+        {/* Далее твой исходный код */}
         <div className="bg-white rounded-3xl p-8 shadow-xl shadow-purple-100/50">
           <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
             <span className="text-2xl">🧠</span>
@@ -46,13 +91,11 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           </p>
         </div>
 
-        {/* Видео */}
         <VideoPlayer 
           embedCode={embedCode}
           title="Определяем точку А"
         />
 
-        {/* Кнопка далее */}
         <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
           <div className="mb-4">
             <div className="w-12 h-12 mx-auto bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
@@ -95,7 +138,6 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           )}
         </div>
 
-        {/* Прогресс */}
         <div className="bg-white rounded-2xl p-6 shadow-lg">
           <ProgressBar 
             current={1} 
@@ -108,7 +150,6 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           </div>
         </div>
 
-        {/* Автор */}
         <div className="bg-white rounded-3xl p-6 shadow-lg">
           <div className="text-center mb-6">
             <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-xl">
