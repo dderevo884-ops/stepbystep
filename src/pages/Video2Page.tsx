@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
-import { VideoPlayer } from '../components/VideoPlayer';
 import { ArrowRight, Lock } from 'lucide-react';
 
 interface Video2PageProps {
@@ -22,11 +21,13 @@ export const Video2Page: React.FC<Video2PageProps> = ({ userName, onNext }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
       <Header userName={userName} />
-      
+
       <div className="max-w-md mx-auto px-4 py-8 space-y-8">
-        <VideoPlayer 
-          embedCode={embedCode}
-          title="Какие инструменты рабочие на самом деле"
+
+        {/* ВИДЕО напрямую */}
+        <div
+          className="bg-white rounded-2xl p-4 shadow-lg"
+          dangerouslySetInnerHTML={{ __html: embedCode }}
         />
 
         <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
@@ -35,17 +36,17 @@ export const Video2Page: React.FC<Video2PageProps> = ({ userName, onNext }) => {
               <span className="text-xl">🛠️</span>
             </div>
           </div>
-          
+
           <p className="text-lg text-gray-700 mb-6 leading-relaxed">
             Завершающее видео где я расскажу где применяются инструменты
           </p>
-          
-          <button 
+
+          <button
             onClick={onNext}
             disabled={!canContinue}
             className={`w-full py-4 px-6 rounded-2xl font-semibold text-lg transition-all duration-200 ${
-              canContinue 
-                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 active:scale-95' 
+              canContinue
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 active:scale-95'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >
@@ -63,7 +64,7 @@ export const Video2Page: React.FC<Video2PageProps> = ({ userName, onNext }) => {
               )}
             </div>
           </button>
-          
+
           {!canContinue && (
             <p className="text-sm text-gray-500 mt-3">
               Подождите {unlockTime} секунд, чтобы открыть следующее
@@ -78,9 +79,13 @@ export const Video2Page: React.FC<Video2PageProps> = ({ userName, onNext }) => {
             <span>67%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full" style={{ width: '67%' }}></div>
+            <div
+              className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"
+              style={{ width: '67%' }}
+            ></div>
           </div>
         </div>
+
       </div>
     </div>
   );
