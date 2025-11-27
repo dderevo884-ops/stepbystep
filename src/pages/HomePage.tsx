@@ -63,7 +63,7 @@ export const HomePage: React.FC<HomePageProps> = ({ userName, onStartJourney }) 
           </div>
           
           <h1 className="text-3xl font-bold text-gray-800 mb-4 leading-tight text-left">
-            10 практических инструментов для управления эмоциями ребёнка
+            1000 практических инструментов для управления эмоциями ребёнка
           </h1>
           
           <p className="text-lg text-gray-600 leading-relaxed text-left mb-6">
